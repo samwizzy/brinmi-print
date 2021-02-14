@@ -5,6 +5,7 @@ export const HomeConfig = {
   routes: [
     {
       path: "/",
+      exact: true,
       component: Home,
     },
   ],

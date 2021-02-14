@@ -1,24 +1,25 @@
-# Brinmi Print
+# Brinmi Print (2.0)
 
 This is a versatile book store [Brinmi Print](https://brinmiprint.com/).
 
 ## The project target the following features:
 
 1. Book storage
-2. Catalogue
-3. Merchandize
-4. Modular book update by chapters
+2. EBook Catalogue & Download
+3. Merchandize (Free & Premium Authorization)
+4. Payment Gateway
+5. Third Party Ebook Platform
+6. Modular book update by chapters
 
 In the project directory, you can run:
 
 ```
 yarn start
-
 ```
 
-This will serv on on localhost:300 if available otherwise on a alterative port
+This will serve on localhost:3000 if available otherwise on an alternative port
 
-About Brinmi Print
+## About Brinmi Print
 
 See the section about [brinmiprint.com](https://brinmiprint.com) to view it in the browser.
 
@@ -29,6 +30,10 @@ See the section about [brinmiprint.com](https://brinmiprint.com) to view it in t
 **What this book stores**
 
 ...
+
+### Development URL
+
+See the section about [http://134.209.64.28:82/](http://134.209.64.28:82/) to view it in the browser.
 
 ### Swagger Api documentation
 

@@ -1,7 +1,7 @@
 import axios from "axios";
-import { FlareUtils } from "../../@flare";
+import { BrinmiUtils } from "../../@brinmi";
 
-class authService extends FlareUtils.EventEmitter {
+class authService extends BrinmiUtils.EventEmitter {
   init() {
     this.setInterceptors();
     this.handleAuthentication();

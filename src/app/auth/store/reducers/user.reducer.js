@@ -4,7 +4,8 @@ const initialState = {
   loading: false,
   data: {
     company: null,
-    email: null,
+    name: "test",
+    email: "test@gmail.com",
     individualUser: null,
     phone: null,
     role: null,
