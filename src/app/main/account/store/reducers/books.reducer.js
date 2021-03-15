@@ -9,16 +9,10 @@ const initialState = {
 
 const bookReducer = (state = initialState, action) => {
   switch (action.type) {
-    case Actions.GET_BOOKS: {
+    case Actions.GET_USER_BOOKS: {
       return {
         ...state,
         books: action.payload,
-      };
-    }
-    case Actions.GET_BOOK_BY_ID: {
-      return {
-        ...state,
-        book: action.payload,
       };
     }
     default:

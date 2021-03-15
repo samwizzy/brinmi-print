@@ -3,12 +3,11 @@ import * as Actions from "../actions/user.actions";
 const initialState = {
   loading: false,
   data: {
-    company: null,
+    fullName: null,
     name: "test",
     email: "test@gmail.com",
-    individualUser: null,
     phone: null,
-    role: null,
+    role: [],
     status: null,
   },
   error: null,
@@ -37,7 +36,7 @@ const userReducer = (state = initialState, action) => {
       };
     }
     default:
-      return { ...state };
+      return state;
   }
 };
 

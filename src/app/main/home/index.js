@@ -1,18 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import withReducer from "./../../store/withReducer";
 import { makeStyles } from "@material-ui/core/styles";
-import reducer from "./../../auth/store/reducers";
-import * as authActions from "./../../auth/store/actions";
+import reducer from "./store/reducers";
+import * as Actions from "./store/actions";
 import { Card, CardContent } from "@material-ui/core";
 import { BookCard, BookReadCard } from "@brinmi";
-import _ from "lodash";
-import books from "./books.json";
 import ImageSlider from "./components/Slider";
 
 const useStyles = makeStyles((theme) => ({
-  cardImage: { height: "48px", width: "48px" },
+  cardImage: { width: "48px" },
 }));
 
 const promises = [
@@ -40,6 +38,14 @@ const promises = [
 
 function Home(props) {
   const classes = useStyles(props);
+  const { books, getBooks } = props;
+
+  useEffect(() => {
+    getBooks();
+    return () => {};
+  }, [getBooks]);
+
+  console.log(books, "books");
 
   return (
     <div>
@@ -55,7 +61,7 @@ function Home(props) {
             {promises.map((item, i) => (
               <Card key={i} className="col-span-6 md:col-span-2">
                 <CardContent>
-                  <div className="flex justify-between items-center p-2">
+                  <div className="flex justify-around items-center p-2">
                     <img src={item.icon} alt="" className={classes.cardImage} />
                     <div className="flex flex-col space-y-2">
                       <h3 className="text-base">{item.title}</h3>
@@ -79,9 +85,8 @@ function Home(props) {
 
           <div className="mt-6">
             <dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-4 md:gap-x-8 md:gap-y-10">
-              {_.range(0, 4).map((item, i) => (
-                <BookCard key={i} />
-              ))}
+              {books &&
+                books.map((book, i) => <BookCard key={i} book={book} />)}
             </dl>
           </div>
         </div>
@@ -93,9 +98,8 @@ function Home(props) {
             Currently Reading
           </p>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mt-4">
-            {books.slice(0, 8).map((book, i) => (
-              <BookReadCard key={i} />
-            ))}
+            {books &&
+              books.map((book, i) => <BookReadCard key={i} book={book} />)}
           </div>
         </div>
       </div>
@@ -110,9 +114,8 @@ function Home(props) {
 
           <div className="mt-6">
             <dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-4 md:gap-x-8 md:gap-y-10">
-              {_.range(0, 4).map((item, i) => (
-                <BookCard key={i} />
-              ))}
+              {books &&
+                books.map((book, i) => <BookCard key={i} book={book} />)}
             </dl>
           </div>
         </div>
@@ -121,23 +124,22 @@ function Home(props) {
   );
 }
 
-const mapStateToProps = ({ auth }) => {
-  console.log(auth, "auth");
+const mapStateToProps = ({ booksReducer }) => {
   return {
-    loading: auth.register.loading,
+    books: booksReducer.books.books,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
-      register: authActions.register,
+      getBooks: Actions.getBooks,
     },
     dispatch
   );
 };
 
 export default withReducer(
-  "homeApp",
+  "booksReducer",
   reducer
 )(connect(mapStateToProps, mapDispatchToProps)(Home));

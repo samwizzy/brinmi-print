@@ -9,6 +9,10 @@ const initialState = {
     open: false,
     data: null,
   },
+  chapterSlideDialog: {
+    open: false,
+    data: { chapters: [], active: 0 },
+  },
 };
 
 const chapterReducer = (state = initialState, action) => {
@@ -35,6 +39,18 @@ const chapterReducer = (state = initialState, action) => {
       return {
         ...state,
         subscribeDialog: { open: false, data: null },
+      };
+    }
+    case Actions.OPEN_CHAPTER_SLIDE_DIALOG: {
+      return {
+        ...state,
+        chapterSlideDialog: { open: true, data: { chapters: action.payload } },
+      };
+    }
+    case Actions.CLOSE_CHAPTER_SLIDE_DIALOG: {
+      return {
+        ...state,
+        chapterSlideDialog: { open: false, data: { chapters: [], active: 0 } },
       };
     }
     default:

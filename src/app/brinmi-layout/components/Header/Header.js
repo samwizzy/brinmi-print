@@ -1,7 +1,9 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import clsx from "clsx";
 import { withRouter, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import * as Actions from "./../../../auth/store/actions";
+import * as appActions from "./../../../store/actions";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   AppBar,
@@ -80,21 +82,27 @@ const useStyles = makeStyles((theme) => ({
 
 const links = [
   { name: "Profile", icon: "person", path: "/account" },
-  { name: "Logout", icon: "lock", path: "/logout" },
   { name: "My Books", icon: "library_books", path: "/account/books" },
   { name: "My Earnings", icon: "local_mall", path: "/account/earnings" },
 ];
 
 const extraLinks = [
+  { name: "Logout", icon: "lock", path: "/logout", action: Actions.logout },
   { name: "Settings", icon: "settings", path: "/settings" },
   { name: "Help Center", icon: "help_outline", path: "/help-center" },
 ];
 
 export default withRouter(function Header(props) {
   const classes = useStyles(props);
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const user = useSelector(({ auth }) => auth.user.data);
+  const cart = useSelector(({ cart }) => cart.cart.data);
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    dispatch(appActions.getCarts());
+  }, [dispatch]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -112,8 +120,16 @@ export default withRouter(function Header(props) {
     setAnchorEl(null);
   };
 
+  const handleLink = (fn) => {
+    dispatch(fn());
+    handleClose();
+  };
+
   const _open = Boolean(anchorEl);
   const id = _open ? "auth-popover" : undefined;
+
+  console.log(user, "user from header");
+  console.log(cart, "cart from header");
 
   return (
     <div className="border-0 border-b border-solid border-gray-200">
@@ -121,11 +137,13 @@ export default withRouter(function Header(props) {
         <Toolbar>
           <div className="w-full md:max-w-7xl md:mx-auto px-4 lg:px-8 flex items-center justify-between text-sm">
             <div className="flex items-center">
-              <img
-                className={clsx("img h-14 mr-8")}
-                src="/logo.png"
-                alt="logo"
-              />
+              <Link to="/">
+                <img
+                  className={clsx("img h-14 mr-8")}
+                  src="/logo.png"
+                  alt="logo"
+                />
+              </Link>
             </div>
 
             <div className="flex items-center space-x-2">
@@ -136,12 +154,13 @@ export default withRouter(function Header(props) {
                 )}
               >
                 <Link to="/">Home</Link>
+                <Link to="/books">Books</Link>
                 <Link to="/contacts">Contacts</Link>
                 <Link to="/checkout">Checkout</Link>
                 <Link to="/wishlist">Wishlist (0)</Link>
-                <Link to="/accounts">Account</Link>
+                <Link to="/account">Account</Link>
               </div>
-              {!user.role ? (
+              {user.role.length ? (
                 <Fragment>
                   <IconButton component={Link} to="/account/notifications">
                     <Badge badgeContent={4} color="secondary">
@@ -195,7 +214,12 @@ export default withRouter(function Header(props) {
                       ))}
                       <Divider />
                       {extraLinks.map((link, i) => (
-                        <MenuItem key={i} component={Link} to={link.path}>
+                        <MenuItem
+                          key={i}
+                          component={Link}
+                          to={link.path}
+                          onClick={() => handleLink(link.action)}
+                        >
                           <ListItemIcon className={classes.listIcon}>
                             <Icon>{link.icon}</Icon>
                           </ListItemIcon>
@@ -208,7 +232,7 @@ export default withRouter(function Header(props) {
               ) : (
                 <Fragment>
                   <Button
-                    className={clsx(classes.button, "hover:text-white")}
+                    className={clsx(classes.button)}
                     variant="contained"
                     color="secondary"
                     component={Link}
@@ -217,7 +241,7 @@ export default withRouter(function Header(props) {
                     Login
                   </Button>
                   <Button
-                    className={clsx(classes.button, "hover:text-white")}
+                    className={clsx(classes.button)}
                     variant="outlined"
                     color="secondary"
                     component={Link}

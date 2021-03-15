@@ -33,7 +33,7 @@ export function logout() {
       ]).then(
         dispatch(showSnackbar({ message: data.message })),
         dispatch(removeUserData()),
-        history.push("/")
+        history.push("/sign-in")
       );
     });
 }

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import clsx from "clsx";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import * as Actions from "./../../../auth/store/actions";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   colors,
@@ -37,14 +39,19 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login(props) {
   const classes = useStyles(props);
+  const authProps = useSelector(({ auth }) => auth.login);
+  const { data, loading } = authProps;
+  const [userRole, setUserRole] = useState("AUTHOR");
   const [isVisible, setIsVisible] = useState(false);
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
+  const dispatch = useDispatch();
+  const [form, setForm] = useState({ ...data });
 
   const handleChange = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
+  };
+
+  const handleSubmit = () => {
+    dispatch(Actions.login(form));
   };
 
   return (
@@ -54,7 +61,7 @@ export default function Login(props) {
           <h3 className="text-2xl md:text-3xl leading-8 tracking-tight font-extrabold text-gray-800">
             Sign In
           </h3>
-          <p className="text-lg md:text-xl leading-8 tracking-tight text-gray-600">
+          <p className="text-lg leading-8 tracking-wide text-gray-600">
             As a User or an Author
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
@@ -63,8 +70,8 @@ export default function Login(props) {
                 <RadioGroup
                   aria-label="role"
                   name="role"
-                  value={form.role}
-                  onChange={handleChange}
+                  value={userRole}
+                  onChange={(event) => setUserRole(event.target.value)}
                   row
                 >
                   <FormControlLabel
@@ -82,13 +89,14 @@ export default function Login(props) {
               <div className="space-y-8">
                 <TextField
                   label="Email"
+                  name="email"
                   variant="outlined"
                   value={form.email}
                   onChange={handleChange}
                   fullWidth
                   InputProps={{
                     endAdornment: (
-                      <IconButton>
+                      <IconButton className="focus:outline-none">
                         <MailOutlineIcon />
                       </IconButton>
                     ),
@@ -97,13 +105,18 @@ export default function Login(props) {
 
                 <TextField
                   label="Password"
+                  name="password"
                   variant="outlined"
                   type={isVisible ? "text" : "password"}
                   value={form.password}
+                  onChange={handleChange}
                   fullWidth
                   InputProps={{
                     endAdornment: (
-                      <IconButton onClick={() => setIsVisible(!isVisible)}>
+                      <IconButton
+                        className="focus:outline-none"
+                        onClick={() => setIsVisible(!isVisible)}
+                      >
                         {isVisible ? (
                           <VisibilityOutlinedIcon />
                         ) : (
@@ -129,8 +142,9 @@ export default function Login(props) {
                     color="secondary"
                     size="large"
                     rounded
+                    onClick={handleSubmit}
                   >
-                    Sign In
+                    {loading ? "Loading..." : "Sign In"}
                   </Button>
                 </div>
               </div>

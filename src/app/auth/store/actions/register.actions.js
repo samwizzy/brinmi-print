@@ -7,13 +7,14 @@ export const REGISTER_ERROR = "[AUTH] REGISTER_ERROR";
 export const REGISTER_PROGRESS = "[AUTH] REGISTER_PROGRESS";
 
 export function register(data) {
+  console.log(data, "submit data register");
   return (dispatch) => {
     dispatch({ type: REGISTER_PROGRESS });
     authService
       .createUser(data)
       .then((user) => {
         Promise.all([
-          dispatch(setUserData(user)),
+          dispatch(setUserData(user.data.body)),
           dispatch({ type: REGISTER_SUCCESS }),
         ]).then(dispatch(showSnackbar({ message: "Registration successful" })));
       })

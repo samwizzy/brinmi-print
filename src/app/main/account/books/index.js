@@ -2,7 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import withReducer from "./../../../store/withReducer";
-import * as Actions from "./../store/actions";
+// import * as Actions from "./../store/actions";
+import * as appActions from "./../../../store/actions";
 import reducer from "./../store/reducers";
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -95,7 +96,7 @@ const mapStateToProps = ({ bookReducer }) => {
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
-      openShippingDialog: Actions.openShippingDialog,
+      openShippingDialog: appActions.openShippingDialog,
     },
     dispatch
   );

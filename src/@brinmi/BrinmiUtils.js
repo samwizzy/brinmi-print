@@ -44,6 +44,13 @@ class BrinmiUtils {
     return 0;
   }
 
+  static truncate(str, max, add) {
+    add = add || "...";
+    return typeof str === "string" && str.length > max
+      ? str.substring(0, max) + add
+      : str;
+  }
+
   static formatCurrency = (value, code = "NGN", locale = "en-NG") => {
     if (!code) code = "NGN";
     return new Intl.NumberFormat(locale, {

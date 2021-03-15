@@ -41,7 +41,7 @@ function a11yProps(index) {
   };
 }
 
-function BookApp(props) {
+function AccountApp(props) {
   const classes = useStyles(props);
   const [value, setValue] = useState(0);
 
@@ -121,7 +121,7 @@ function BookApp(props) {
   );
 }
 
-const mapStateToProps = ({ bookApp }) => {
+const mapStateToProps = ({ accountReducer }) => {
   return {};
 };
 
@@ -129,12 +129,13 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
       getBooks: Actions.getBooks,
+      getCart: Actions.getCart,
     },
     dispatch
   );
 };
 
 export default withReducer(
-  "bookApp",
+  "accountReducer",
   reducer
-)(connect(mapStateToProps, mapDispatchToProps)(BookApp));
+)(connect(mapStateToProps, mapDispatchToProps)(AccountApp));

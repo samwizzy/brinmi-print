@@ -1,18 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { bindActionCreators } from "redux";
+import { connect, useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import withReducer from "./../../../store/withReducer";
+import reducer from "./../store/reducers";
+import * as Actions from "./../store/actions";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Card,
   CardHeader,
   CardContent,
   CardMedia,
-  IconButton,
   Paper,
   Tabs,
   Tab,
+  IconButton,
 } from "@material-ui/core";
-import GetAppIcon from "@material-ui/icons/GetApp";
+import { Skeleton } from "@material-ui/lab";
 import Description from "./components/Description";
 import Content from "./components/Content";
+import ChapterSlideDialog from "./dialog/ChapterSliderDialog";
+import SubscribeDialog from "./dialog/SubscribeDialog";
 
 const useStyles = makeStyles((theme) => ({
   tabs: {
@@ -22,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
   },
   currentCard: {
     flexGrow: 1,
-    minHeight: 480,
     position: "relative",
     borderRadius: theme.spacing(2),
     "& .MuiCardContent-root": {
@@ -46,29 +53,46 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function BookDetails(props) {
+export function BookDetails(props) {
   const classes = useStyles(props);
+  const { book, rating, user, openChapterSlideDialog } = props;
+  const dispatch = useDispatch();
   const [value, setValue] = React.useState(0);
+
+  const { bookId } = useParams();
+
+  useEffect(() => {
+    dispatch(Actions.getBookById(bookId));
+    dispatch(Actions.getBookRating(bookId));
+    return () => {};
+  }, [dispatch, bookId]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  console.log(bookId, "bookId bookDetailReducer");
+  console.log(book, "book bookDetailReducer");
+  console.log(user, "user bookDetailReducer");
+  console.log(rating, "rating bookDetailReducer");
 
   return (
     <div className="w-full bg-gray-200">
       <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
         <Card className={classes.currentCard}>
           <CardHeader
-            title="Design Your Faith"
-            subheader="by Jude Ibrahim"
+            title={book ? book.book.title : <Skeleton />}
+            subheader={`by ${
+              book ? book?.book?.publisher?.name : "loading..."
+            }`}
             action={
               <IconButton>
-                <GetAppIcon />
+                <img src="/assets/icons/upload.svg" className="h-6" alt="" />
               </IconButton>
             }
           />
           <CardMedia
-            className="w-full h-screen mb-96"
+            className="w-full h-screen"
             image="https://image.freepik.com/free-psd/top-view-bookss-with-pen-flowers_23-2148568929.jpg"
           />
           <CardContent>
@@ -88,11 +112,46 @@ export default function BookDetails(props) {
 
             <div className={classes.toolbar} />
 
-            <div>{value === 0 && <Description />}</div>
-            <div>{value === 1 && <Content />}</div>
+            <div>
+              {value === 0 && (
+                <Description
+                  book={book?.book}
+                  rating={rating}
+                  chapters={book?.chapters}
+                  user={user}
+                  openChapterSlideDialog={openChapterSlideDialog}
+                />
+              )}
+            </div>
+            <div>{value === 1 && <Content chapters={book?.chapters} />}</div>
           </CardContent>
         </Card>
+
+        <ChapterSlideDialog />
+        <SubscribeDialog />
       </div>
     </div>
   );
 }
+
+const mapStateToProps = ({ bookDetailReducer, auth }) => {
+  console.log(bookDetailReducer, "bookDetailReducer");
+  return {
+    rating: bookDetailReducer.books.rating,
+    book: bookDetailReducer.books.book,
+    user: auth.user.data,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators(
+    {
+      openChapterSlideDialog: Actions.openChapterSlideDialog,
+    },
+    dispatch
+  );
+};
+
+export default withReducer(
+  "bookDetailReducer",
+  reducer
+)(connect(mapStateToProps, mapDispatchToProps)(BookDetails));

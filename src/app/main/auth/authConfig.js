@@ -1,4 +1,5 @@
-import Loadable from "react-loadable";
+import loadable from "@loadable/component";
+// import { Loader } from "@brinmi";
 
 export const AuthConfig = {
   // auth: ["COMPANY"],
@@ -6,18 +7,12 @@ export const AuthConfig = {
     {
       path: "/sign-in",
       exact: true,
-      component: Loadable({
-        loader: () => import("./login"),
-        loading: () => <div>Loading...</div>,
-      }),
+      component: loadable(() => import("./login")),
     },
     {
       path: "/sign-up",
       exact: true,
-      component: Loadable({
-        loader: () => import("./register"),
-        loading: () => <div>Loading...</div>,
-      }),
+      component: loadable(() => import("./register")),
     },
   ],
 };

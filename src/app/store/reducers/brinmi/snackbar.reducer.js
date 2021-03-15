@@ -1,4 +1,4 @@
-import * as Actions from "../../actions/flare/snackbar.actions";
+import * as Actions from "../../actions/brinmi/snackbar.actions";
 
 const initialState = {
   state: null,

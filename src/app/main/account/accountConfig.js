@@ -1,4 +1,4 @@
-import Loadable from "react-loadable";
+import loadable from "@loadable/component";
 // import { Loader as Loading } from "@brinmi";
 
 export const AccountConfig = {
@@ -7,76 +7,46 @@ export const AccountConfig = {
     {
       path: "/account",
       exact: true,
-      component: Loadable({
-        loader: () => import("./account-details"),
-        loading: () => <div>Loading...</div>,
-      }),
+      component: loadable(() => import("./account-details")),
     },
     {
       path: "/account/books",
       exact: true,
-      component: Loadable({
-        loader: () => import("./books"),
-        loading: () => <div>Loading...</div>,
-      }),
+      component: loadable(() => import("./books")),
     },
     {
       path: "/account/books/new",
-      component: Loadable({
-        loader: () => import("./books/book-upload"),
-        loading: () => <div>Loading...</div>,
-      }),
+      component: loadable(() => import("./books/book-upload")),
     },
     {
       path: "/account/earnings",
       exact: true,
-      component: Loadable({
-        loader: () => import("./earnings"),
-        loading: () => <div>Loading...</div>,
-      }),
+      component: loadable(() => import("./earnings")),
     },
     {
       path: "/account/earnings/:earningId",
-      component: Loadable({
-        loader: () => import("./earnings/earning-details"),
-        loading: () => <div>Loading...</div>,
-      }),
+      component: loadable(() => import("./earnings/earning-details")),
     },
     {
       path: "/account/notifications",
-      component: Loadable({
-        loader: () => import("./notifications"),
-        loading: () => <div>Loading...</div>,
-      }),
+      component: loadable(() => import("./notifications")),
     },
     {
       path: "/account/chapters",
-      component: Loadable({
-        loader: () => import("./chapters"),
-        loading: () => <div>Loading...</div>,
-      }),
+      component: loadable(() => import("./chapters")),
     },
     {
       path: "/account/subscriptions",
-      component: Loadable({
-        loader: () => import("./subscription"),
-        loading: () => <div>Loading...</div>,
-      }),
+      component: loadable(() => import("./subscription")),
     },
     {
       path: "/account/cart",
       exact: true,
-      component: Loadable({
-        loader: () => import("./cart"),
-        loading: () => <div>Loading...</div>,
-      }),
+      component: loadable(() => import("./cart")),
     },
     {
       path: "/account/cart/shipping",
-      component: Loadable({
-        loader: () => import("./cart/shipping"),
-        loading: () => <div>Loading...</div>,
-      }),
+      component: loadable(() => import("./cart/shipping")),
     },
   ],
 };

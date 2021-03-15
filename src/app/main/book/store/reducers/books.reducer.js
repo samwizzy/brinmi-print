@@ -3,6 +3,7 @@ import * as Actions from "./../actions/books.actions";
 const initialState = {
   books: [],
   book: null,
+  rating: null,
   loading: false,
   error: null,
 };
@@ -19,6 +20,12 @@ const bookReducer = (state = initialState, action) => {
       return {
         ...state,
         book: action.payload,
+      };
+    }
+    case Actions.GET_BOOK_RATING: {
+      return {
+        ...state,
+        rating: action.payload,
       };
     }
     default:

@@ -1,15 +1,17 @@
 import axios from "axios";
 
-export const GET_BOOKS = "[BOOKS] GET_BOOKS";
-export const GET_BOOK_BY_ID = "[BOOKS] GET_BOOK_BY_ID";
+export const GET_USER_BOOKS = "[BOOKS] GET_USER_BOOKS";
 
-export function getBooks() {
-  const request = axios.get("/books");
+export function getUserBooks() {
+  const request = axios.get("/users/my-books");
 
-  request.then((response) => {
-    return {
-      type: GET_BOOKS,
-      payload: response.data,
-    };
-  });
+  return (dispatch) =>
+    request.then((response) => {
+      if ((response.status === 200) & response.data.data) {
+        dispatch({
+          type: GET_USER_BOOKS,
+          payload: response.data.data.body,
+        });
+      }
+    });
 }

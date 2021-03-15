@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import clsx from "clsx";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import _ from "lodash";
 import withReducer from "./../../../store/withReducer";
+import * as Actions from "./../store/actions";
 import reducer from "./../store/reducers";
 import { makeStyles } from "@material-ui/core/styles";
 import { Card, CardHeader, CardContent, CardActions } from "@material-ui/core";
@@ -10,7 +12,7 @@ import { BrinmiUtils, Button } from "@brinmi";
 
 const useStyles = makeStyles((theme) => ({
   card: {
-    "&.premium": {
+    "&.PREMIUM": {
       backgroundColor: "#F2BD28",
       color: theme.palette.secondary.contrastText,
       "& .MuiButton-root": {
@@ -28,22 +30,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const packages = [
-  {
-    name: "Basic",
-    color: "basic",
-  },
-  {
-    name: "Premium",
-    color: "premium",
-  },
-];
-
 export function Subscriptions(props) {
   const classes = useStyles(props);
+  const { getSubscriptions, subscriptions } = props;
+
+  useEffect(() => {
+    getSubscriptions();
+  }, [getSubscriptions]);
 
   return (
-    <div className="w-full bg-gray-200 py-16">
+    <div className="w-full bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
         <div className="text-center lg:text-left">
           <h2 className=" text-2xl text-gray-800 font-semibold tracking-wide">
@@ -56,22 +52,27 @@ export function Subscriptions(props) {
         </div>
         <div className="mt-6">
           <dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-4 md:gap-x-8 md:gap-y-10">
-            {packages.map((sub, i) => (
+            {subscriptions.map((sub, i) => (
               <Card
+                key={i}
                 square
-                elevation={0}
-                className={clsx(classes.card, { [sub.color]: true })}
+                elevation={1}
+                className={clsx(classes.card, { [sub.id]: true })}
               >
                 <CardHeader
-                  title={sub.name}
+                  title={sub.id}
                   titleTypographyProps={{ variant: "h5" }}
                 />
 
                 <CardContent>
                   <div className="flex flex-col space-y-6">
-                    <p className="text-sm">Access to all books for a year</p>
+                    <p className="text-sm">{sub.description}</p>
                     <p className="text-lg tracking-wider">
-                      {`${BrinmiUtils.formatCurrency(2000)} / $20`}
+                      {`${BrinmiUtils.formatCurrency(
+                        sub.price
+                      )} / ${BrinmiUtils.formatCurrency(
+                        _.ceil(sub.price / sub.exchangeRateToDollar)
+                      )}`}
                     </p>
                     <p className="text-sm">Paid Yearly</p>
                   </div>
@@ -97,11 +98,19 @@ export function Subscriptions(props) {
 }
 
 const mapStateToProps = ({ subReducer }) => {
-  return {};
+  console.log(subReducer, "subReducersubReducer");
+  return {
+    subscriptions: subReducer.subscription.subscriptions,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({}, dispatch);
+  return bindActionCreators(
+    {
+      getSubscriptions: Actions.getSubscriptions,
+    },
+    dispatch
+  );
 };
 
 export default withReducer(

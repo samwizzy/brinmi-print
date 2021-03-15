@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function BookReadCard(props) {
+export default function BookReadCard({ book }, props) {
   const classes = useStyles(props);
 
   return (
@@ -41,8 +41,10 @@ export default function BookReadCard(props) {
       />
       <CardContent>
         <div className="flex flex-col">
-          <h3 className="text-base">Design Your Faith</h3>
-          <p className="text-sm text-gray-600 mb-2">by Jude Ibrahim</p>
+          <h3 className="text-base">{book.book.title}</h3>
+          <p className="text-sm text-gray-600 mb-2">
+            by {book.book.publisher.name}
+          </p>
 
           <div className="flex justify-between text-sm space-x-4 my-2">
             <h3 className="">Progress</h3>

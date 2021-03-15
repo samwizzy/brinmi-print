@@ -51,7 +51,7 @@ class authService extends BrinmiUtils.EventEmitter {
 
   createUser = (data) => {
     return new Promise((resolve, reject) => {
-      axios.post("/api-register-agent", data).then((response) => {
+      axios.post("/register", data).then((response) => {
         if (response.status === 201) {
           resolve(response.data);
         } else {
@@ -65,25 +65,23 @@ class authService extends BrinmiUtils.EventEmitter {
     // console.log("customOnUploadProgress", ev);
   }
 
-  signInWithEmailAndPassword = (email, password, platformType = "WEB") => {
+  signInWithEmailAndPassword = ({ email, password }) => {
     return new Promise((resolve, reject) => {
-      const data = { email, password, platformType };
+      const data = { email, password };
       axios
         .post("/login", data, {
           onUploadProgress: this.customOnUploadProgress,
         })
         .then((response) => {
-          if (response.data.token && response.status === 202) {
-            this.setSession(response.data.token);
-            this.getUserData(response.data.token).then((user) => {
-              if (user.data) {
-                resolve(user.data);
-              } else {
-                reject(user.error);
-              }
-            });
+          if (response.data.data.body.accessToken && response.status === 200) {
+            this.setSession(response.data.data.body.accessToken);
+            if (response.data) {
+              resolve(response.data);
+            } else {
+              reject(response.data);
+            }
           } else {
-            reject(response.data.message);
+            reject(response.data);
           }
         })
         .catch((error) => {

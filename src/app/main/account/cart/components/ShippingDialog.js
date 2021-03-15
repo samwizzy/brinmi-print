@@ -1,7 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import * as Actions from "./../../store/actions";
+import * as Actions from "./../../../../store/actions";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@brinmi";
 import { Dialog, DialogActions, DialogContent } from "@material-ui/core";

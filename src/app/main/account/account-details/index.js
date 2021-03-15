@@ -1,4 +1,9 @@
 import React from "react";
+import {bindActionCreators} from "redux"
+import { connect, useSelector } from "react-redux";
+import * as Actions from "./../store/actions"
+import reducer from "./../store/reducers"
+import withReducer from "./../../../store/withReducer"
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Avatar,
@@ -12,8 +17,9 @@ import {
 } from "@material-ui/core";
 import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
-import Description from "./components/Description";
-import Content from "./components/Content";
+import Profile from "./components/Profile";
+import Settings from "./components/Settings";
+import MyBooks from "./components/MyBooks";
 
 const useStyles = makeStyles((theme) => ({
   tabs: {
@@ -36,13 +42,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AccountDetails(props) {
+function AccountDetails(props) {
   const classes = useStyles(props);
   const [value, setValue] = React.useState(0);
+  const user = useSelector(({ auth }) => auth.user.data);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  console.log(user, "user account details");
 
   return (
     <div className="w-full bg-gray-200">
@@ -72,18 +81,33 @@ export default function AccountDetails(props) {
                 indicatorColor="secondary"
                 textColor="primary"
               >
-                <Tab label="Description" />
-                <Tab label="Content" />
+                <Tab label="Profile" />
+                <Tab label="My Books" />
+                <Tab label="Settings" />
               </Tabs>
             </Paper>
 
             <div className={classes.toolbar} />
 
-            <div>{value === 0 && <Description />}</div>
-            <div>{value === 1 && <Content />}</div>
+            <div>{value === 0 && <Profile user={user} />}</div>
+            <div>{value === 1 && <MyBooks />}</div>
+            <div>{value === 2 && <Settings />}</div>
           </CardContent>
         </Card>
       </div>
     </div>
   );
 }
+
+const mapStateToProps = ({accountReducer}) => {
+  console.log(accountReducer, "accountReducer")
+  return {}
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    getUserBooks: Actions.getUserBooks
+  }, dispatch)
+}
+
+export default withReducer("accountReducer", reducer)(connect(mapStateToProps, mapDispatchToProps)(AccountDetails))

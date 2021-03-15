@@ -15,6 +15,21 @@ const cartReducer = (state = initialState, action) => {
     case Actions.GET_CART: {
       return {
         ...state,
+        loading: false,
+        cart: action.payload,
+      };
+    }
+    case Actions.ADD_TO_CART: {
+      return {
+        ...state,
+        loading: false,
+        cart: action.payload,
+      };
+    }
+    case Actions.DELETE_FROM_CART: {
+      return {
+        ...state,
+        loading: false,
         cart: action.payload,
       };
     }

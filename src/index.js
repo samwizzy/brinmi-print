@@ -4,6 +4,8 @@ import "./index.css";
 import App from "./app/App";
 import reportWebVitals from "./reportWebVitals";
 
+console.log(process.env.ITEMS_DYNAMODB_TABLE, "DYNAMODB TABLE");
+
 ReactDOM.render(
   // <React.StrictMode>
   <App />,

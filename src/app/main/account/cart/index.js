@@ -1,8 +1,8 @@
 import React from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import withReducer from "./../../../store/withReducer";
-import * as Actions from "./../store/actions";
+import * as appActions from "./../../../store/actions";
 import reducer from "./../store/reducers";
 import { makeStyles } from "@material-ui/core/styles";
 import { Card, CardMedia, CardContent } from "@material-ui/core";
@@ -12,6 +12,7 @@ import ShippingDialog from "./components/ShippingDialog";
 const useStyles = makeStyles((theme) => ({
   card: {
     display: "flex",
+    height: "250px",
     borderRadius: theme.spacing(2),
     backgroundColor: theme.palette.background.paper,
     "& .MuiCardContent-root": {
@@ -20,27 +21,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const carts = [
-  {
-    title: "Design Your Faith",
-    description: "This is the description for this book",
-    price: 150000,
-  },
-  {
-    title: "Spiritual Guideline",
-    description: "This is the description for this book",
-    price: 120000,
-  },
-  {
-    title: "Outwitting the Devil",
-    description: "This is the description for this book",
-    price: 520000,
-  },
-];
-
 export function Cart(props) {
   const classes = useStyles(props);
   const { openShippingDialog } = props;
+  const carts = useSelector(({ cart }) => cart.cart.data);
 
   return (
     <div className="w-full bg-gray-200 py-16">
@@ -55,12 +39,12 @@ export function Cart(props) {
 
               <CardContent>
                 <div className="w-full">
-                  <h3 className="text-base">{cart.title}</h3>
-                  <p className="text-sm text-gray-600 mb-2">
-                    {cart.description}
+                  <h3 className="text-base">{cart.book.title}</h3>
+                  <p className="text-sm text-gray-600 mb-2 overflow-ellipsis overflow-hidden">
+                    {BrinmiUtils.truncate(cart.book.description, 120)}
                   </p>
                   <h3 className="text-lg font-light text-green mt-2">
-                    {BrinmiUtils.formatCurrency(cart.price)}
+                    {BrinmiUtils.formatCurrency(cart.book.price)}
                   </h3>
                 </div>
               </CardContent>
@@ -72,7 +56,7 @@ export function Cart(props) {
           <h3 className="text-gray-800">Total</h3>
           <h3 className="text-green">
             {BrinmiUtils.formatCurrency(
-              carts.reduce((n, row) => n + row.price, 0)
+              carts.reduce((n, row) => n + row.book.price, 0)
             )}
           </h3>
         </div>
@@ -103,7 +87,7 @@ const mapStateToProps = ({ cartReducer }) => {
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
-      openShippingDialog: Actions.openShippingDialog,
+      openShippingDialog: appActions.openShippingDialog,
     },
     dispatch
   );

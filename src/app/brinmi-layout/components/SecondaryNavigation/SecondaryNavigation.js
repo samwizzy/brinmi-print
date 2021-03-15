@@ -99,14 +99,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const categories = [
-  { title: "All" },
-  { title: "Exclusive" },
-  { title: "Children" },
-  { title: "Finance" },
-  { title: "Family" },
-];
-
 const StyledBadge = withStyles((theme) => ({
   badge: {
     right: -3,
@@ -119,6 +111,8 @@ const StyledBadge = withStyles((theme) => ({
 export default withRouter(function Header(props) {
   const classes = useStyles(props);
   const user = useSelector(({ auth }) => auth.user.data);
+  const categories = useSelector(({ books }) => books.category.categories);
+  const cart = useSelector(({ cart }) => cart.cart.data);
 
   return (
     <div>
@@ -177,8 +171,12 @@ export default withRouter(function Header(props) {
             <div className="flex items-center space-x-2">
               {user.role ? (
                 <Fragment>
-                  <IconButton aria-label="cart">
-                    <StyledBadge badgeContent={4} color="secondary">
+                  <IconButton
+                    aria-label="cart"
+                    component={Link}
+                    to="/account/cart"
+                  >
+                    <StyledBadge badgeContent={cart.length} color="secondary">
                       <ShoppingCartIcon />
                     </StyledBadge>
                   </IconButton>
@@ -190,7 +188,7 @@ export default withRouter(function Header(props) {
                     component={Link}
                     to="/account/cart"
                   >
-                    <StyledBadge badgeContent={4} color="secondary">
+                    <StyledBadge badgeContent={0} color="secondary">
                       <ShoppingCartIcon />
                     </StyledBadge>
                   </IconButton>

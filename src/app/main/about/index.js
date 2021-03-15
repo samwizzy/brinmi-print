@@ -43,7 +43,7 @@ function Home(props) {
         <div className="grid grid-cols-6 gap-8 py-8">
           <div className="col-span-6 md:col-span-4">
             <h2 className="text-2xl sm:text-3xl text-gray-900 mb-4">
-              About Flare
+              About Brimni Print
             </h2>
             <p className="tracking-wide text-lg text-gray-800">
               Flare is an Optisoft initiative, over the years, Optisoft has

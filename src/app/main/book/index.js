@@ -1,14 +1,34 @@
-import React, { useState } from "react";
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import withReducer from "./../../store/withReducer";
 import { makeStyles } from "@material-ui/core/styles";
-import { AppBar, Box, Tabs, Tab } from "@material-ui/core";
+import {
+  AppBar,
+  Box,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+  Tabs,
+  Tab,
+} from "@material-ui/core";
+import MoreIcon from "@material-ui/icons/MoreVert";
+import AddIcon from "@material-ui/icons/Add";
 import * as Actions from "./store/actions";
+import * as appActions from "./../../store/actions";
 import reducer from "./store/reducers";
 import { BookCard } from "@brinmi";
-import _ from "lodash";
-import FinanceCategory from "./category/FinanceCategory";
+import {
+  Finance,
+  Family,
+  Relationship,
+  Exclusive,
+  All,
+  Children,
+  Adult,
+} from "./category";
+import CategoryDialog from "./category/components/CategoryDialog";
 
 const useStyles = makeStyles((theme) => ({
   tabs: {
@@ -43,11 +63,21 @@ function a11yProps(index) {
 
 function BookApp(props) {
   const classes = useStyles(props);
+  const dispatch = useDispatch();
   const [value, setValue] = useState(0);
+  const books = useSelector(({ bookReducer }) => bookReducer.books.books);
+  const categories = useSelector(({ books }) => books.category.categories);
+
+  useEffect(() => {
+    dispatch(Actions.getBooks());
+    return () => {};
+  }, [dispatch]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  console.log(books, "books");
 
   return (
     <div>
@@ -78,27 +108,58 @@ function BookApp(props) {
         </div>
       </div>
 
-      <TabPanel value={value} index={0}>
-        <FinanceCategory />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <FinanceCategory />
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        <FinanceCategory />
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        <FinanceCategory />
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-        <FinanceCategory />
-      </TabPanel>
-      <TabPanel value={value} index={5}>
-        <FinanceCategory />
-      </TabPanel>
-      <TabPanel value={value} index={6}>
-        <FinanceCategory />
-      </TabPanel>
+      <div className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-12 gap-4">
+            <div className="col-span-2">
+              <div className="flex items-center justify-between">
+                <h3 className="text-gray-800 text-xl">Category</h3>
+                <IconButton
+                  size="small"
+                  onClick={() => dispatch(appActions.openCategoryDialog())}
+                >
+                  <AddIcon fontSize="small" />
+                </IconButton>
+              </div>
+              <List dense>
+                {categories.map((category, i) => (
+                  <ListItem key={i} disableGutters>
+                    <ListItemText primary={category.title} />
+                    <ListItemSecondaryAction>
+                      <IconButton size="small" edge="end" aria-label="more">
+                        <MoreIcon fontSize="small" />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            </div>
+            <div className="col-span-10">
+              <TabPanel value={value} index={0}>
+                <All books={books} />
+              </TabPanel>
+              <TabPanel value={value} index={1}>
+                <Exclusive books={books} />
+              </TabPanel>
+              <TabPanel value={value} index={2}>
+                <Finance books={books} />
+              </TabPanel>
+              <TabPanel value={value} index={3}>
+                <Relationship books={books} />
+              </TabPanel>
+              <TabPanel value={value} index={4}>
+                <Children books={books} />
+              </TabPanel>
+              <TabPanel value={value} index={5}>
+                <Family books={books} />
+              </TabPanel>
+              <TabPanel value={value} index={6}>
+                <Adult books={books} />
+              </TabPanel>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -110,31 +171,17 @@ function BookApp(props) {
 
           <div className="mt-6">
             <dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-4 md:gap-x-8 md:gap-y-10">
-              {_.range(0, 4).map((item, i) => (
-                <BookCard key={i} />
+              {books.map((book, i) => (
+                <BookCard key={i} book={book} />
               ))}
             </dl>
           </div>
         </div>
       </div>
+
+      <CategoryDialog />
     </div>
   );
 }
 
-const mapStateToProps = ({ bookApp }) => {
-  return {};
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(
-    {
-      getBooks: Actions.getBooks,
-    },
-    dispatch
-  );
-};
-
-export default withReducer(
-  "bookApp",
-  reducer
-)(connect(mapStateToProps, mapDispatchToProps)(BookApp));
+export default withReducer("bookReducer", reducer)(BookApp);
