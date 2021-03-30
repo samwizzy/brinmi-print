@@ -10,7 +10,7 @@ const baseStyle = {
   padding: "16px",
   borderWidth: 2,
   borderRadius: 2,
-  borderColor: "#eeeeee",
+  borderColor: "#9ac876",
   borderStyle: "dashed",
   backgroundColor: "#fafafa",
   outline: "none",
@@ -39,7 +39,8 @@ function ImageDropzone(props) {
     isDragReject,
     // acceptedFiles,
   } = useDropzone({
-    accept: "image/*, *.pdf, *.doc",
+    accept: "image/jpeg, image/png",
+    multiple: false,
     onDrop: (acceptedFiles) => {
       const files = acceptedFiles.map((file) =>
         Object.assign(file, {
@@ -50,15 +51,15 @@ function ImageDropzone(props) {
     },
   });
 
-  const files = form.images.map((file, i) => (
-    <li key={i}>
+  const files = (
+    <li>
       <img
-        src={`data:image/jpg;base64,${file.encodedString}`}
+        src={`data:image/jpg;base64,${form.imageCover}`}
         alt=""
         className="h-40"
       />
     </li>
-  ));
+  );
 
   const style = useMemo(
     () => ({

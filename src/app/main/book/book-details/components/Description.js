@@ -1,27 +1,40 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import * as Actions from "./../../../../store/actions";
+import clsx from "clsx";
 import { Button, BrinmiUtils } from "@brinmi";
 import { Rating, Skeleton } from "@material-ui/lab";
 import StarBorderIcon from "@material-ui/icons/StarBorder";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles(theme => ({
+  button: {
+    "&.color": { color: "red" }
+  }
+}))
 
 export default function Description(props) {
-  const { book, rating, user, chapters, openChapterSlideDialog } = props;
+  const classes = useStyles(props)
+  const { book, rating, user, cart, chapters, openChapterSlideDialog } = props;
   const dispatch = useDispatch();
-  const [cart, setCart] = useState({
+  const [form, setForm] = useState({
     bookId: 0,
     userId: 0,
   });
 
   useEffect(() => {
     if (book && user) {
-      setCart({ bookId: book.id, userId: user.id });
+      setForm({ bookId: book.id, userId: user.id });
     }
-    return () => {};
+    return () => { };
   }, [book, user]);
 
-  console.log(cart, "cart form");
+  console.log(form, "cart form");
   console.log(chapters, "chapters form");
+
+  const selectedCart = cart.find(c => c.book.id === book?.id);
+
+  console.log(selectedCart, "selectedCart ")
 
   return (
     <div className="flex flex-col">
@@ -49,11 +62,15 @@ export default function Description(props) {
         <Button
           variant="outlined"
           color="secondary"
+          className={clsx(classes.button, { color: selectedCart })}
           size="large"
           rounded
-          onClick={() => dispatch(Actions.addToCart(cart))}
+          onClick={() => selectedCart
+            ? dispatch(Actions.deleteFromCart(selectedCart.id))
+            : dispatch(Actions.addToCart(form))
+          }
         >
-          Add to Cart
+          {selectedCart ? "Remove from cart" : "Add to Cart"}
         </Button>
         <Button
           variant="contained"

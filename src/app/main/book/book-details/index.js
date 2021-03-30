@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 
 export function BookDetails(props) {
   const classes = useStyles(props);
-  const { book, rating, user, openChapterSlideDialog } = props;
+  const { book, rating, user, cart, openChapterSlideDialog } = props;
   const dispatch = useDispatch();
   const [value, setValue] = React.useState(0);
 
@@ -64,7 +64,7 @@ export function BookDetails(props) {
   useEffect(() => {
     dispatch(Actions.getBookById(bookId));
     dispatch(Actions.getBookRating(bookId));
-    return () => {};
+    return () => { };
   }, [dispatch, bookId]);
 
   const handleChange = (event, newValue) => {
@@ -75,6 +75,7 @@ export function BookDetails(props) {
   console.log(book, "book bookDetailReducer");
   console.log(user, "user bookDetailReducer");
   console.log(rating, "rating bookDetailReducer");
+  console.log(cart, "cart bookDetailReducer");
 
   return (
     <div className="w-full bg-gray-200">
@@ -82,9 +83,8 @@ export function BookDetails(props) {
         <Card className={classes.currentCard}>
           <CardHeader
             title={book ? book.book.title : <Skeleton />}
-            subheader={`by ${
-              book ? book?.book?.publisher?.name : "loading..."
-            }`}
+            subheader={`by ${book ? book?.book?.publisher?.name : "loading..."
+              }`}
             action={
               <IconButton>
                 <img src="/assets/icons/upload.svg" className="h-6" alt="" />
@@ -119,6 +119,7 @@ export function BookDetails(props) {
                   rating={rating}
                   chapters={book?.chapters}
                   user={user}
+                  cart={cart}
                   openChapterSlideDialog={openChapterSlideDialog}
                 />
               )}
@@ -134,12 +135,13 @@ export function BookDetails(props) {
   );
 }
 
-const mapStateToProps = ({ bookDetailReducer, auth }) => {
+const mapStateToProps = ({ bookDetailReducer, auth, cart }) => {
   console.log(bookDetailReducer, "bookDetailReducer");
   return {
     rating: bookDetailReducer.books.rating,
     book: bookDetailReducer.books.book,
     user: auth.user.data,
+    cart: cart.cart.data
   };
 };
 const mapDispatchToProps = (dispatch) => {

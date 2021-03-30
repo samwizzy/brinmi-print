@@ -36,25 +36,27 @@ export default function BookReadCard({ book }, props) {
   return (
     <Card className={classes.currentCard}>
       <CardMedia
-        className="w-full h-64"
-        image="https://image.freepik.com/free-psd/high-angle-turned-open-book-mock-up_23-2148657114.jpg"
+        className='w-full h-64'
+        image='https://image.freepik.com/free-psd/high-angle-turned-open-book-mock-up_23-2148657114.jpg'
       />
       <CardContent>
-        <div className="flex flex-col">
-          <h3 className="text-base">{book.book.title}</h3>
-          <p className="text-sm text-gray-600 mb-2">
+        <div className='flex flex-col'>
+          <h3 className='text-base'>{book.book.title}</h3>
+          <p className='text-sm text-gray-600 mb-2'>
             by {book.book.publisher.name}
           </p>
 
-          <div className="flex justify-between text-sm space-x-4 my-2">
-            <h3 className="">Progress</h3>
-            <Divider orientation="vertical" flexItem />
-            <h3 className="">65%</h3>
+          <div className='flex justify-between text-sm space-x-4 my-2'>
+            <h3 className=''>Progress</h3>
+            <Divider orientation='vertical' flexItem />
+            <h3 className=''>65%</h3>
           </div>
 
           <LinearProgress
+            variant='determinate'
+            value={65}
             className={classes.linearProgress}
-            color="secondary"
+            color='secondary'
           />
         </div>
       </CardContent>

@@ -2,6 +2,7 @@ import * as Actions from "./../actions/subscription.actions";
 
 const initialState = {
   subscriptions: [],
+  userSubscriptions: [],
   loading: false,
   error: null,
   subscriptionDialog: {
@@ -12,6 +13,25 @@ const initialState = {
 
 const cartReducer = (state = initialState, action) => {
   switch (action.type) {
+    case Actions.GET_USER_SUBSCRIPTIONS: {
+      return {
+        ...state,
+        loading: false,
+        userSubscriptions: action.payload,
+      };
+    }
+    case Actions.CREATE_USER_SUBSCRIPTION: {
+      return {
+        ...state,
+        loading: false,
+      };
+    }
+    case Actions.UPDATE_USER_SUBSCRIPTION: {
+      return {
+        ...state,
+        loading: false,
+      };
+    }
     case Actions.GET_SUBSCRIPTIONS: {
       return {
         ...state,

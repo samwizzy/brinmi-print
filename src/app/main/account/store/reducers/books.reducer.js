@@ -15,6 +15,18 @@ const bookReducer = (state = initialState, action) => {
         books: action.payload,
       };
     }
+    case Actions.UPLOAD_BOOK: {
+      return {
+        ...state,
+        loading: false,
+      };
+    }
+    case Actions.UPLOAD_BOOK_CHAPTER: {
+      return {
+        ...state,
+        loading: false,
+      };
+    }
     default:
       return { ...state };
   }

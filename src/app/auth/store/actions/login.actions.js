@@ -1,6 +1,7 @@
 import authService from "./../../../services/authService";
 import { setUserData } from "./user.actions";
 import { showSnackbar } from "./../../../store/actions";
+import history from "./../../../history"
 
 export const LOGIN_SUCCESS = "[AUTH] LOGIN_SUCCESS_2";
 export const LOGIN_ERROR = "[AUTH] LOGIN_ERROR";
@@ -15,7 +16,10 @@ export function login(data) {
         Promise.all([
           dispatch(setUserData(user.data.body)),
           dispatch({ type: LOGIN_SUCCESS }),
-        ]).then(dispatch(showSnackbar({ message: "Registration successful" })));
+        ]).then(
+          dispatch(showSnackbar({ message: "Registration successful" })),
+          history.push("/")
+        );
       })
       .catch((error) => {
         dispatch({

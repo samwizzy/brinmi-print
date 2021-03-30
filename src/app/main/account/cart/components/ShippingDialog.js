@@ -25,7 +25,7 @@ function ShippingDialog(props) {
   const { history } = props;
   const dispatch = useDispatch();
   const dialog = useSelector(
-    ({ cartReducer }) => cartReducer.cart.shippingDialog
+    ({ cart }) => cart.cart.shippingDialog
   );
 
   const handleAccept = () => {
@@ -33,7 +33,7 @@ function ShippingDialog(props) {
     history.push("/account/cart/shipping");
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => { };
 
   return (
     <Dialog

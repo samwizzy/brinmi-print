@@ -1,6 +1,8 @@
 import React from "react";
+import { useDispatch } from "react-redux"
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
+import * as Actions from "./../../../store/actions"
 import {
   Icon,
   IconButton,
@@ -8,6 +10,7 @@ import {
   ListItem,
   ListItemText,
 } from "@material-ui/core";
+import { Button } from "@brinmi"
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -40,6 +43,7 @@ const links = {
 
 export default function Footer(props) {
   const classes = useStyles(props);
+  const dispatch = useDispatch()
 
   return (
     <div className="flex flex-col gap-y-2 bg-gray-800 text-white text-sm">
@@ -87,6 +91,14 @@ export default function Footer(props) {
                 <p>18 Saint Andrew Street New Layout,</p>
                 <p>Island Lagos State, Nigeria 12008</p>
               </div>
+
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={() => dispatch(Actions.openPartnerWithUsDialog())}
+              >
+                Partner with Us
+                </Button>
             </div>
           </div>
         </div>

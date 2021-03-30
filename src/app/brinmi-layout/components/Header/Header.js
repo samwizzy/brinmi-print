@@ -88,7 +88,7 @@ const links = [
 
 const extraLinks = [
   { name: "Logout", icon: "lock", path: "/logout", action: Actions.logout },
-  { name: "Settings", icon: "settings", path: "/settings" },
+  { name: "Settings", icon: "settings", path: "/account" },
   { name: "Help Center", icon: "help_outline", path: "/help-center" },
 ];
 
@@ -98,10 +98,14 @@ export default withRouter(function Header(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const user = useSelector(({ auth }) => auth.user.data);
   const cart = useSelector(({ cart }) => cart.cart.data);
+  const notifications = useSelector(
+    ({ brinmi }) => brinmi.notification.notifications
+  );
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     dispatch(appActions.getCarts());
+    dispatch(appActions.getNotifications());
   }, [dispatch]);
 
   const handleDrawerOpen = () => {
@@ -130,6 +134,7 @@ export default withRouter(function Header(props) {
 
   console.log(user, "user from header");
   console.log(cart, "cart from header");
+  console.log(notifications, "notifications from header");
 
   return (
     <div className="border-0 border-b border-solid border-gray-200">
@@ -155,15 +160,16 @@ export default withRouter(function Header(props) {
               >
                 <Link to="/">Home</Link>
                 <Link to="/books">Books</Link>
-                <Link to="/contacts">Contacts</Link>
-                <Link to="/checkout">Checkout</Link>
-                <Link to="/wishlist">Wishlist (0)</Link>
+                <Link to="/account/cart">Cart</Link>
                 <Link to="/account">Account</Link>
               </div>
               {user.role.length ? (
                 <Fragment>
                   <IconButton component={Link} to="/account/notifications">
-                    <Badge badgeContent={4} color="secondary">
+                    <Badge
+                      badgeContent={notifications?.length}
+                      color="secondary"
+                    >
                       <NotificationsNoneIcon />
                     </Badge>
                   </IconButton>
@@ -213,19 +219,34 @@ export default withRouter(function Header(props) {
                         </MenuItem>
                       ))}
                       <Divider />
-                      {extraLinks.map((link, i) => (
-                        <MenuItem
-                          key={i}
-                          component={Link}
-                          to={link.path}
-                          onClick={() => handleLink(link.action)}
-                        >
-                          <ListItemIcon className={classes.listIcon}>
-                            <Icon>{link.icon}</Icon>
-                          </ListItemIcon>
-                          <ListItemText className="pl-0" primary={link.name} />
-                        </MenuItem>
-                      ))}
+                      {extraLinks.map((link, i) =>
+                        link.action ? (
+                          <MenuItem
+                            key={i}
+                            component={Link}
+                            to={link.path}
+                            onClick={() => handleLink(link.action)}
+                          >
+                            <ListItemIcon className={classes.listIcon}>
+                              <Icon>{link.icon}</Icon>
+                            </ListItemIcon>
+                            <ListItemText
+                              className="pl-0"
+                              primary={link.name}
+                            />
+                          </MenuItem>
+                        ) : (
+                          <MenuItem key={i} component={Link} to={link.path}>
+                            <ListItemIcon className={classes.listIcon}>
+                              <Icon>{link.icon}</Icon>
+                            </ListItemIcon>
+                            <ListItemText
+                              className="pl-0"
+                              primary={link.name}
+                            />
+                          </MenuItem>
+                        )
+                      )}
                     </Fragment>
                   </Popover>
                 </Fragment>

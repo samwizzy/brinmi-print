@@ -1,5 +1,6 @@
 import React from "react";
-import { connect } from "react-redux";
+import moment from "moment"
+import { connect, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import withReducer from "./../../../store/withReducer";
 import * as appActions from "./../../../store/actions";
@@ -28,28 +29,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const notifications = [
-  {
-    title: "New Book Alert",
-    description: "This is the description for this book",
-  },
-  {
-    title: "Review Your Subscription",
-    description: "This is the description for this book",
-  },
-  {
-    title: "New Book Alert",
-    description: "This is the description for this book",
-  },
-  {
-    title: "Spiritual Guideline",
-    description: "This is the description for this book",
-    price: 720000,
-  },
-];
-
 export function Notifications(props) {
   const classes = useStyles(props);
+  const notifications = useSelector(({ brinmi }) => brinmi.notification.notifications);
 
   return (
     <div className="w-full bg-gray-100 py-16">
@@ -72,12 +54,12 @@ export function Notifications(props) {
                   <div>
                     <h3 className="text-base">{notification.title}</h3>
                     <p className="text-sm text-gray-600 mb-2">
-                      {notification.description}
+                      {notification.message}
                     </p>
                   </div>
                   <div className="flex flex-col space-y-1 text-xs whitespace-nowrap">
-                    <span>12-03-2021</span>
-                    <span>20:45 pm</span>
+                    <span>{moment(notification.recordStatus.createdAt).format("ll")}</span>
+                    <span>{moment(notification.recordStatus.createdAt).format("hh:mm a")}</span>
                   </div>
                 </div>
               </CardContent>

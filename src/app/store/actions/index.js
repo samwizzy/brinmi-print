@@ -1,3 +1,3 @@
-export * from "./brinmi/snackbar.actions";
+export * from "./brinmi";
 export * from "./books/category.actions";
-export * from "./cart/cart.actions";
+export * from "./cart";

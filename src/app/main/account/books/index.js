@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import withReducer from "./../../../store/withReducer";
@@ -12,6 +13,8 @@ import {
   CardContent,
   CardActionArea,
 } from "@material-ui/core";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload"; //
+import { Button } from "@brinmi";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -57,10 +60,17 @@ export function MyBooks(props) {
   return (
     <div className="w-full bg-gray-100 py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div>
+        <div className="flex items-center justify-between">
           <h3 className="text-2xl md:text-3xl leading-8 tracking-tight font-extrabold text-gray-800">
             My Books
           </h3>
+          <Button
+            component={Link}
+            to="/account/books/new"
+            startIcon={<CloudUploadIcon color="secondary" />}
+          >
+            Upload book
+          </Button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-4">
           {books.map((book, i) => (

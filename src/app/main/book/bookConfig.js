@@ -1,4 +1,3 @@
-import Book from ".";
 import loadable from "@loadable/component";
 // import { Loader as Loading } from "@brinmi";
 
@@ -8,7 +7,7 @@ export const BookConfig = {
     {
       path: "/books",
       exact: true,
-      component: Book,
+      component: loadable(() => import(".")),
     },
     {
       path: "/books/:bookId",

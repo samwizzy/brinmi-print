@@ -11,13 +11,17 @@ import {
 
 const pages = [
   { name: "Home", path: "/", icon: "home" },
-  { name: "Contact", path: "/", icon: "contacts" },
-  { name: "Checkout", path: "/", icon: "shopping_cart" },
-  { name: "Wishlist", path: "/", icon: "local_mall" },
+  { name: "Book Club", path: "/", icon: "forum" },
+  { name: "My Books", path: "/", icon: "local_library" },
+  { name: "Partner with Us", path: "/partner", icon: "business" },
+  { name: "Cart", path: "/account/cart", icon: "shopping_cart" },
+  { name: "Notifications", path: "/account/notifications", icon: "notifications" },
 ];
 
 const authPages = [
-  { name: "Profile", path: "/profile", icon: "person" },
+  { name: "Profile", path: "/account", icon: "person" },
+  { name: "Help", path: "/help-center", icon: "help" },
+  { name: "Settings", path: "/settings", icon: "settings" },
   { name: "Logout", path: "/logout", icon: "exit_to_app" },
 ];
 
