@@ -1,0 +1,22 @@
+[
+	{
+	  "title": "Free Delivery",
+	  "subtitle": "For all orders over $99",
+	  "icon": "/assets/icons/startup.svg"
+	},
+	{
+	  "title": "90 Days Return",
+	  "subtitle": "If goods have problems",
+	  "icon": "/assets/icons/return.svg"
+	},
+	{
+	  "title": "Secure Payment",
+	  "subtitle": "100% secure payment",
+	  "icon": "/assets/icons/credit-card.svg"
+	},
+	{
+	  "title": "24/7 Support",
+	  "subtitle": "Dedicated support",
+	  "icon": "/assets/icons/support.svg"
+	}
+]

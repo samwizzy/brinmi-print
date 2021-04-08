@@ -1,10 +1,14 @@
-import * as Actions from "./../actions/chapter.actions";
+import * as Actions from './../actions/chapter.actions';
 
 const initialState = {
   books: [],
   book: null,
   loading: false,
   error: null,
+  chapterUploadDialog: {
+    open: false,
+    data: null,
+  },
   subscribeDialog: {
     open: false,
     data: null,
@@ -27,6 +31,24 @@ const chapterReducer = (state = initialState, action) => {
       return {
         ...state,
         book: action.payload,
+      };
+    }
+    case Actions.UPLOAD_BOOK_CHAPTER: {
+      return {
+        ...state,
+        loading: false,
+      };
+    }
+    case Actions.OPEN_CHAPTER_UPLOAD_DIALOG: {
+      return {
+        ...state,
+        chapterUploadDialog: { open: true, data: action.payload },
+      };
+    }
+    case Actions.CLOSE_CHAPTER_UPLOAD_DIALOG: {
+      return {
+        ...state,
+        chapterUploadDialog: { open: false, data: null },
       };
     }
     case Actions.OPEN_SUBSCRIBE_DIALOG: {

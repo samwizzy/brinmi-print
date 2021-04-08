@@ -1,4 +1,4 @@
-import * as Actions from "./../../actions/cart/order.actions";
+import * as Actions from './../../actions/cart/order.actions';
 
 const initialState = {
   order: null,
@@ -8,6 +8,12 @@ const initialState = {
 
 const orderReducer = (state = initialState, action) => {
   switch (action.type) {
+    case Actions.SUBMIT_ORDER_PROGRESS: {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
     case Actions.SUBMIT_ORDER: {
       return {
         ...state,

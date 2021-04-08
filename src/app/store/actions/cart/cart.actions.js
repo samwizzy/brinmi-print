@@ -12,7 +12,6 @@ export const CLOSE_SHIPPING_DIALOG = '[CART] CLOSE_SHIPPING_DIALOG';
 
 export function getCarts() {
   const request = axios.get('/carts/users');
-  console.log(request, 'cart called');
 
   return (dispatch) =>
     request.then((response) => {
@@ -27,7 +26,6 @@ export function getCarts() {
 
 export function addToCart(data) {
   const request = axios.post('/carts/', data);
-  console.log(request, 'add to cart called');
 
   return (dispatch) =>
     request.then((response) => {
@@ -47,7 +45,6 @@ export function addToCart(data) {
 
 export function deleteFromCart(cartId) {
   const request = axios.delete('/carts/delete', { params: { id: cartId } });
-  console.log(request, 'delete from cart called');
 
   return (dispatch) =>
     request.then((response) => {

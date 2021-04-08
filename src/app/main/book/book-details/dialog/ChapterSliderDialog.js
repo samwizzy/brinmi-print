@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { connect, useDispatch } from "react-redux";
-import withReducer from "../../../../store/withReducer";
-import reducer from "../../store/reducers";
-import * as Actions from "../../store/actions";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import React, { useState } from 'react';
+import { connect, useDispatch } from 'react-redux';
+import withReducer from '../../../../store/withReducer';
+import reducer from '../../store/reducers';
+import * as Actions from '../../store/actions';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import {
   Dialog,
   DialogContent,
@@ -11,11 +11,11 @@ import {
   MobileStepper,
   Toolbar,
   Button,
-} from "@material-ui/core";
-import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
-import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
-import ArrowRightIcon from "@material-ui/icons/ArrowRight";
-import { Document, Page, pdfjs } from "react-pdf";
+} from '@material-ui/core';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import { Document, Page, pdfjs } from 'react-pdf';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const useStyles = makeStyles((theme) => ({
@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   header: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
     height: 50,
     paddingLeft: theme.spacing(4),
     backgroundColor: theme.palette.background.default,
@@ -58,29 +58,29 @@ function ChapterSlider({ dialog }, props) {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  console.log(dialog, "dialog play chapter");
+  console.log(dialog, 'dialog play chapter');
 
   return (
     <Dialog
       onClose={() => dispatch(Actions.closeChapterSlideDialog())}
-      aria-labelledby="chapter-slide-dialog"
+      aria-labelledby='chapter-slide-dialog'
       open={dialog.open}
       fullWidth
-      maxWidth="md"
+      maxWidth='md'
     >
       <Toolbar>
-        <DialogTitle id="simple-dialog-title">Chapters</DialogTitle>
+        <DialogTitle id='simple-dialog-title'>Chapters</DialogTitle>
         <ArrowRightIcon />
-        <DialogTitle id="simple-dialog-title">
-          {chapters ? chapters[activeStep]?.title : ""}
+        <DialogTitle id='simple-dialog-title'>
+          {chapters ? chapters[activeStep]?.title : ''}
         </DialogTitle>
       </Toolbar>
 
       <DialogContent dividers>
         <div className={classes.root}>
           <Document
-            file="/assets/doc/studio.pdf"
-            // file={chapters[activeStep]?.fileUpload.path}
+            // file="/assets/doc/studio.pdf"
+            file={chapters[activeStep]?.fileUpload.path}
             onLoadSuccess={onDocumentLoadSuccess}
           >
             <Page pageNumber={pageNumber} />
@@ -90,17 +90,17 @@ function ChapterSlider({ dialog }, props) {
           </p>
           <MobileStepper
             steps={maxSteps}
-            position="static"
-            variant="text"
+            position='static'
+            variant='text'
             activeStep={activeStep}
             nextButton={
               <Button
-                size="small"
+                size='small'
                 onClick={handleNext}
                 disabled={activeStep === maxSteps - 1}
               >
                 Next
-                {theme.direction === "rtl" ? (
+                {theme.direction === 'rtl' ? (
                   <KeyboardArrowLeft />
                 ) : (
                   <KeyboardArrowRight />
@@ -109,11 +109,11 @@ function ChapterSlider({ dialog }, props) {
             }
             backButton={
               <Button
-                size="small"
+                size='small'
                 onClick={handleBack}
                 disabled={activeStep === 0}
               >
-                {theme.direction === "rtl" ? (
+                {theme.direction === 'rtl' ? (
                   <KeyboardArrowRight />
                 ) : (
                   <KeyboardArrowLeft />
@@ -135,6 +135,6 @@ const mapStateToProps = ({ chapterReducer }) => {
 };
 
 export default withReducer(
-  "chapterReducer",
+  'chapterReducer',
   reducer
 )(connect(mapStateToProps)(ChapterSlider));

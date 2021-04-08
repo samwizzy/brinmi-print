@@ -1,7 +1,14 @@
-import * as Actions from './../actions/books.actions';
+import * as Actions from '../../actions/library/books.actions';
 
 const initialState = {
   books: {
+    data: [],
+    total: 0,
+    limit: 0,
+    page: 0,
+    totalChapters: 0,
+  },
+  filteredBooks: {
     data: [],
     total: 0,
     limit: 0,
@@ -21,12 +28,28 @@ const bookReducer = (state = initialState, action) => {
       return {
         ...state,
         books: action.payload,
+        filteredBooks: action.payload,
+      };
+    }
+    case Actions.GET_FILTERED_BOOKS: {
+      return {
+        ...state,
+        filteredBooks: {
+          ...state.books,
+          data: action.payload,
+        },
       };
     }
     case Actions.GET_BOOK_BY_ID: {
       return {
         ...state,
         book: action.payload,
+      };
+    }
+    case Actions.UPLOAD_BOOK_CHAPTER: {
+      return {
+        ...state,
+        loading: false,
       };
     }
     case Actions.DELETE_BOOK_BY_ID: {

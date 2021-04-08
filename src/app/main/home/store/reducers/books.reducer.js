@@ -1,4 +1,4 @@
-import { GET_BOOKS } from "./../actions";
+import { GET_FEATURE_BOOKS } from './../actions';
 
 const initialState = {
   books: [],
@@ -6,7 +6,7 @@ const initialState = {
 
 const booksReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_BOOKS: {
+    case GET_FEATURE_BOOKS: {
       return {
         ...state,
         books: action.payload,

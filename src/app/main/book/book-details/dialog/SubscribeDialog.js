@@ -1,12 +1,12 @@
-import React from "react";
-import {withRouter} from "react-router-dom"
-import { connect, useDispatch } from "react-redux";
-import withReducer from "./../../../../store/withReducer";
-import reducer from "./../../store/reducers";
-import * as Actions from "./../../store/actions";
-import { makeStyles } from "@material-ui/core/styles";
-import { Dialog, DialogContent } from "@material-ui/core";
-import { Button } from "@brinmi";
+import React from 'react';
+import { withRouter } from 'react-router-dom';
+import { connect, useDispatch } from 'react-redux';
+import withReducer from './../../../../store/withReducer';
+import reducer from './../../store/reducers';
+import * as Actions from './../../store/actions';
+import { makeStyles } from '@material-ui/core/styles';
+import { Dialog, DialogContent } from '@material-ui/core';
+import { Button } from '@brinmi';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -19,23 +19,29 @@ function ChapterSlider({ dialog, history }, props) {
   const classes = useStyles(props);
 
   const handleNavigate = () => {
-    history.push("/account/subscriptions")
-    dispatch(Actions.closeSubscribeDialog())
-  }
+    history.push('/account/subscriptions');
+    dispatch(Actions.closeSubscribeDialog());
+  };
 
   return (
     <Dialog
       onClose={() => dispatch(Actions.closeSubscribeDialog())}
-      aria-labelledby="subscribe-dialog"
+      aria-labelledby='subscribe-dialog'
       open={dialog.open}
       classes={{ paper: classes.paper }}
     >
       <DialogContent>
-        <div className="text-center flex flex-col space-y-6 p-8">
-          <Button color="secondary" variant="contained" size="large" rounded onClick={handleNavigate}>
+        <div className='text-center flex flex-col space-y-6 p-8'>
+          <Button
+            color='secondary'
+            variant='contained'
+            size='large'
+            rounded
+            onClick={handleNavigate}
+          >
             Subscribe
           </Button>
-          <p className="text-gray-600 font-extralight">To Continue Reading</p>
+          <p className='text-gray-600 font-extralight'>To Continue Reading</p>
         </div>
       </DialogContent>
     </Dialog>
@@ -49,6 +55,6 @@ const mapStateToProps = ({ chapterReducer }) => {
 };
 
 export default withReducer(
-  "chapterReducer",
+  'chapterReducer',
   reducer
 )(withRouter(connect(mapStateToProps)(ChapterSlider)));

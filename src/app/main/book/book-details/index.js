@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
-import { bindActionCreators } from "redux";
-import { connect, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
-import withReducer from "./../../../store/withReducer";
-import reducer from "./../store/reducers";
-import * as Actions from "./../store/actions";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useEffect } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import withReducer from './../../../store/withReducer';
+import reducer from './../store/reducers';
+import * as Actions from './../store/actions';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Card,
   CardHeader,
@@ -15,40 +15,41 @@ import {
   Tabs,
   Tab,
   IconButton,
-} from "@material-ui/core";
-import { Skeleton } from "@material-ui/lab";
-import Description from "./components/Description";
-import Content from "./components/Content";
-import ChapterSlideDialog from "./dialog/ChapterSliderDialog";
-import SubscribeDialog from "./dialog/SubscribeDialog";
+} from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
+import Description from './components/Description';
+import Content from './components/Content';
+import ChapterSlideDialog from './dialog/ChapterSliderDialog';
+import SubscribeDialog from './dialog/SubscribeDialog';
+import ChapterUploadDialog from './../chapters/components/ChapterUploadDialog';
 
 const useStyles = makeStyles((theme) => ({
   tabs: {
-    "& button:focus": {
-      outline: "none",
+    '& button:focus': {
+      outline: 'none',
     },
   },
   currentCard: {
     flexGrow: 1,
-    position: "relative",
     borderRadius: theme.spacing(2),
-    "& .MuiCardContent-root": {
+    '& .MuiCardContent-root': {
       borderRadius: theme.spacing(2, 2, 0, 0),
       backgroundColor: theme.palette.common.white,
-      position: "absolute",
-      bottom: 0,
-      left: 0,
-      right: 0,
+      position: 'relative',
+      top: -15,
     },
-    "& .MuiCardHeader-action": {
+    '& .MuiCardHeader-action': {
       marginTop: 0,
       marginRight: 0,
+    },
+    '& .MuiCardMedia-root': {
+      backgroundSize: 'contain',
     },
   },
   toolbar: {
     ...theme.mixins.toolbar,
-    [theme.breakpoints.up("sm")]: {
-      minHeight: "48px",
+    [theme.breakpoints.up('sm')]: {
+      minHeight: '48px',
     },
   },
 }));
@@ -64,36 +65,37 @@ export function BookDetails(props) {
   useEffect(() => {
     dispatch(Actions.getBookById(bookId));
     dispatch(Actions.getBookRating(bookId));
-    return () => { };
+    return () => {};
   }, [dispatch, bookId]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  console.log(bookId, "bookId bookDetailReducer");
-  console.log(book, "book bookDetailReducer");
-  console.log(user, "user bookDetailReducer");
-  console.log(rating, "rating bookDetailReducer");
-  console.log(cart, "cart bookDetailReducer");
+  console.log(bookId, 'bookId bookDetailReducer');
+  console.log(book, 'book bookDetailReducer');
+  console.log(user, 'user bookDetailReducer');
+  console.log(rating, 'rating bookDetailReducer');
+  console.log(cart, 'cart bookDetailReducer');
 
   return (
-    <div className="w-full bg-gray-200">
-      <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+    <div className='w-full bg-gray-200'>
+      <div className='max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8'>
         <Card className={classes.currentCard}>
           <CardHeader
             title={book ? book.book.title : <Skeleton />}
-            subheader={`by ${book ? book?.book?.publisher?.name : "loading..."
-              }`}
+            subheader={`by ${
+              book ? book?.book?.publisher?.name : 'loading...'
+            }`}
             action={
               <IconButton>
-                <img src="/assets/icons/upload.svg" className="h-6" alt="" />
+                <img src='/assets/icons/upload.svg' className='h-6' alt='' />
               </IconButton>
             }
           />
           <CardMedia
-            className="w-full h-screen"
-            image="https://image.freepik.com/free-psd/top-view-bookss-with-pen-flowers_23-2148568929.jpg"
+            className='w-full h-screen'
+            image={book?.book.imageCover.path}
           />
           <CardContent>
             <Paper elevation={0}>
@@ -101,12 +103,12 @@ export function BookDetails(props) {
                 className={classes.tabs}
                 value={value}
                 onChange={handleChange}
-                indicatorColor="secondary"
-                textColor="primary"
+                indicatorColor='secondary'
+                textColor='primary'
                 centered
               >
-                <Tab label="Description" />
-                <Tab label="Content" />
+                <Tab label='Description' />
+                <Tab label='Content' />
               </Tabs>
             </Paper>
 
@@ -129,6 +131,7 @@ export function BookDetails(props) {
         </Card>
 
         <ChapterSlideDialog />
+        <ChapterUploadDialog book={book?.book} />
         <SubscribeDialog />
       </div>
     </div>
@@ -136,12 +139,12 @@ export function BookDetails(props) {
 }
 
 const mapStateToProps = ({ bookDetailReducer, auth, cart }) => {
-  console.log(bookDetailReducer, "bookDetailReducer");
+  console.log(bookDetailReducer, 'bookDetailReducer');
   return {
     rating: bookDetailReducer.books.rating,
     book: bookDetailReducer.books.book,
     user: auth.user.data,
-    cart: cart.cart.data
+    cart: cart.cart.data,
   };
 };
 const mapDispatchToProps = (dispatch) => {
@@ -154,6 +157,6 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default withReducer(
-  "bookDetailReducer",
+  'bookDetailReducer',
   reducer
 )(connect(mapStateToProps, mapDispatchToProps)(BookDetails));

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import withReducer from "./../../store/withReducer";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { Fragment, useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import withReducer from './../../store/withReducer';
+import { makeStyles } from '@material-ui/core/styles';
+import _ from 'lodash';
 import {
   AppBar,
   Box,
@@ -12,13 +13,14 @@ import {
   ListItemSecondaryAction,
   Tabs,
   Tab,
-} from "@material-ui/core";
-import MoreIcon from "@material-ui/icons/MoreVert";
-import AddIcon from "@material-ui/icons/Add";
-import * as Actions from "./store/actions";
-import * as appActions from "./../../store/actions";
-import reducer from "./store/reducers";
-import { BookCard } from "@brinmi";
+} from '@material-ui/core';
+import MoreIcon from '@material-ui/icons/MoreVert';
+import AddIcon from '@material-ui/icons/Add';
+import * as Actions from './store/actions';
+import * as appActions from './../../store/actions';
+import reducer from './store/reducers';
+import { BookCard, Loader } from '@brinmi';
+import { Pagination } from '@material-ui/lab';
 import {
   Finance,
   Family,
@@ -27,13 +29,15 @@ import {
   All,
   Children,
   Adult,
-} from "./category";
-import CategoryDialog from "./category/components/CategoryDialog";
+} from './category';
+import CategoryDialog from './category/components/CategoryDialog';
+
+const { Loading } = Loader;
 
 const useStyles = makeStyles((theme) => ({
   tabs: {
-    "& button:focus": {
-      outline: "none",
+    '& button:focus': {
+      outline: 'none',
     },
   },
 }));
@@ -43,7 +47,7 @@ function TabPanel(props) {
 
   return (
     <div
-      role="tabpanel"
+      role='tabpanel'
       hidden={value !== index}
       id={`scrollable-auto-tabpanel-${index}`}
       aria-labelledby={`scrollable-auto-tab-${index}`}
@@ -57,7 +61,7 @@ function TabPanel(props) {
 function a11yProps(index) {
   return {
     id: `scrollable-auto-tab-${index}`,
-    "aria-controls": `scrollable-auto-tabpanel-${index}`,
+    'aria-controls': `scrollable-auto-tabpanel-${index}`,
   };
 }
 
@@ -65,60 +69,63 @@ function BookApp(props) {
   const classes = useStyles(props);
   const dispatch = useDispatch();
   const [value, setValue] = useState(0);
-  const books = useSelector(({ bookReducer }) => bookReducer.books.books);
-  const categories = useSelector(({ books }) => books.category.categories);
+  const allBooks = useSelector(({ library }) => library.books.books);
+  const books = useSelector(({ library }) => library.books.filteredBooks);
+  const categories = useSelector(({ library }) => library.category.categories);
 
   useEffect(() => {
-    dispatch(Actions.getBooks());
-    return () => {};
+    dispatch(appActions.getCategories());
+    dispatch(appActions.getBooks());
   }, [dispatch]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  console.log(books, "books");
+  const handlePaginate = (event, page) => {
+    dispatch(Actions.getBooks(page - 1));
+  };
 
   return (
     <div>
-      <div className="w-full bg-green-light">
-        <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+      <div className='w-full bg-green-light'>
+        <div className='max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8'>
           <div className={classes.root}>
-            <AppBar position="static" color="default">
+            <AppBar position='static' color='default'>
               <Tabs
                 className={classes.tabs}
                 value={value}
                 onChange={handleChange}
-                indicatorColor="primary"
-                textColor="primary"
-                variant="scrollable"
-                scrollButtons="auto"
-                aria-label="scrollable auto tabs example"
+                indicatorColor='primary'
+                textColor='primary'
+                variant='scrollable'
+                scrollButtons='auto'
+                aria-label='scrollable auto tabs example'
               >
-                <Tab label="All" {...a11yProps(0)} />
-                <Tab label="Exclusive" {...a11yProps(1)} />
-                <Tab label="Finance" {...a11yProps(2)} />
-                <Tab label="Relationship" {...a11yProps(3)} />
-                <Tab label="Children" {...a11yProps(4)} />
-                <Tab label="Family" {...a11yProps(5)} />
-                <Tab label="Adult" {...a11yProps(6)} />
+                <Tab label='All' {...a11yProps(0)} />
+                <Tab label='Exclusive' {...a11yProps(1)} />
+                <Tab label='Finance' {...a11yProps(2)} />
+                <Tab label='Relationship' {...a11yProps(3)} />
+                <Tab label='Children' {...a11yProps(4)} />
+                <Tab label='Family' {...a11yProps(5)} />
+                <Tab label='Adult' {...a11yProps(6)} />
               </Tabs>
             </AppBar>
           </div>
         </div>
       </div>
 
-      <div className="py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-2">
-              <div className="flex items-center justify-between">
-                <h3 className="text-gray-800 text-xl">Category</h3>
+      <div className='py-12 bg-white'>
+        <div className='max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8'>
+          <div className='grid grid-cols-12 gap-4'>
+            <div className='col-span-2'>
+              <div className='flex items-center justify-between'>
+                <h3 className='text-gray-800 text-xl'>Category</h3>
                 <IconButton
-                  size="small"
+                  size='small'
                   onClick={() => dispatch(appActions.openCategoryDialog())}
                 >
-                  <AddIcon fontSize="small" />
+                  <AddIcon fontSize='small' />
                 </IconButton>
               </div>
               <List dense>
@@ -126,52 +133,67 @@ function BookApp(props) {
                   <ListItem key={i} disableGutters>
                     <ListItemText primary={category.title} />
                     <ListItemSecondaryAction>
-                      <IconButton size="small" edge="end" aria-label="more">
-                        <MoreIcon fontSize="small" />
+                      <IconButton size='small' edge='end' aria-label='more'>
+                        <MoreIcon fontSize='small' />
                       </IconButton>
                     </ListItemSecondaryAction>
                   </ListItem>
                 ))}
               </List>
             </div>
-            <div className="col-span-10">
-              <TabPanel value={value} index={0}>
-                <All books={books} />
-              </TabPanel>
-              <TabPanel value={value} index={1}>
-                <Exclusive books={books} />
-              </TabPanel>
-              <TabPanel value={value} index={2}>
-                <Finance books={books} />
-              </TabPanel>
-              <TabPanel value={value} index={3}>
-                <Relationship books={books} />
-              </TabPanel>
-              <TabPanel value={value} index={4}>
-                <Children books={books} />
-              </TabPanel>
-              <TabPanel value={value} index={5}>
-                <Family books={books} />
-              </TabPanel>
-              <TabPanel value={value} index={6}>
-                <Adult books={books} />
-              </TabPanel>
+            <div className='col-span-10'>
+              {books?.total ? (
+                <Fragment>
+                  <TabPanel value={value} index={0}>
+                    <All books={books.data} />
+                  </TabPanel>
+                  <TabPanel value={value} index={1}>
+                    <Exclusive books={books.data} />
+                  </TabPanel>
+                  <TabPanel value={value} index={2}>
+                    <Finance books={books.data} />
+                  </TabPanel>
+                  <TabPanel value={value} index={3}>
+                    <Relationship books={books.data} />
+                  </TabPanel>
+                  <TabPanel value={value} index={4}>
+                    <Children books={books.data} />
+                  </TabPanel>
+                  <TabPanel value={value} index={5}>
+                    <Family books={books.data} />
+                  </TabPanel>
+                  <TabPanel value={value} index={6}>
+                    <Adult books={books.data} />
+                  </TabPanel>
+
+                  <div className='mt-16'>
+                    <Pagination
+                      className='focus:outline-none'
+                      count={_.ceil(books?.total / books?.limit)}
+                      color='secondary'
+                      onChange={handlePaginate}
+                    />
+                  </div>
+                </Fragment>
+              ) : (
+                <Loading />
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      <div className="py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center lg:text-left">
-            <h2 className=" text-2xl text-gray-800 font-semibold tracking-wide uppercase">
+      <div className='py-12 bg-white'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+          <div className='text-center lg:text-left'>
+            <h2 className=' text-2xl text-gray-800 font-semibold tracking-wide uppercase'>
               Recently Published Books
             </h2>
           </div>
 
-          <div className="mt-6">
-            <dl className="space-y-10 md:space-y-0 md:grid md:grid-cols-4 md:gap-x-8 md:gap-y-10">
-              {books.map((book, i) => (
+          <div className='mt-6'>
+            <dl className='space-y-10 md:space-y-0 md:grid md:grid-cols-4 md:gap-x-8 md:gap-y-10'>
+              {allBooks.data.map((book, i) => (
                 <BookCard key={i} book={book} />
               ))}
             </dl>
@@ -184,4 +206,4 @@ function BookApp(props) {
   );
 }
 
-export default withReducer("bookReducer", reducer)(BookApp);
+export default withReducer('bookReducer', reducer)(BookApp);

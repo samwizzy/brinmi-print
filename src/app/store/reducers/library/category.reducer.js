@@ -1,4 +1,4 @@
-import * as Actions from "../../actions/books/category.actions";
+import * as Actions from '../../actions/library/category.actions';
 
 const initialState = {
   loading: false,

@@ -1,24 +1,23 @@
-import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
-import { connect, useDispatch } from "react-redux";
-import * as Actions from "./../../store/actions";
-import { makeStyles } from "@material-ui/core/styles";
-import { Button } from "@brinmi";
+import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
+import { connect, useDispatch } from 'react-redux';
+import * as Actions from './../../store/actions';
+import { makeStyles } from '@material-ui/core/styles';
+import { Button } from '@brinmi';
 import {
   Dialog,
   DialogTitle,
   DialogActions,
   DialogContent,
-  MenuItem,
   TextField,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    "& .MuiPaper-rounded": {
+    '& .MuiPaper-rounded': {
       borderRadius: theme.spacing(2),
     },
-    "& .MuiDialogActions-root": {
+    '& .MuiDialogActions-root': {
       marginLeft: theme.spacing(2),
       marginRight: theme.spacing(2),
     },
@@ -26,18 +25,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const initialForm = {
-  address: "",
-  email: "",
-  fullName: "",
-  phoneNumber: "",
-  type: "",
+  password: '',
+  fullName: '',
+  phoneNumber: '',
 };
 
 function ProfileDialog(props) {
   const classes = useStyles(props);
   const dispatch = useDispatch();
-  const { dialog } = props;
-  const [form, setForm] = useState({ ...initialForm });
+  const {
+    user: { id, fullName, phone },
+    dialog,
+  } = props;
+  const [form, setForm] = useState({
+    ...initialForm,
+    fullName,
+    phoneNumber: phone,
+  });
 
   const handleChange = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
@@ -48,7 +52,11 @@ function ProfileDialog(props) {
     setForm({ ...initialForm });
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    dispatch(Actions.updateProfile(id, form));
+  };
+
+  console.log(form, 'form sam');
 
   return (
     <Dialog
@@ -72,10 +80,11 @@ function ProfileDialog(props) {
             fullWidth
           />
           <TextField
-            label='Email'
-            name='email'
+            label='Password'
+            name='password'
+            type='password'
             variant='outlined'
-            value={form.email}
+            value={form.password}
             onChange={handleChange}
             margin='dense'
             fullWidth
@@ -89,31 +98,6 @@ function ProfileDialog(props) {
             margin='dense'
             fullWidth
           />
-          <TextField
-            label='Address'
-            name='address'
-            variant='outlined'
-            value={form.address}
-            onChange={handleChange}
-            margin='dense'
-            fullWidth
-            multiline
-            rows={3}
-            rowsMax={4}
-          />
-          <TextField
-            id='select-type'
-            select
-            label='Type'
-            name='type'
-            variant='outlined'
-            value={form.type}
-            onChange={handleChange}
-            margin='dense'
-            fullWidth
-          >
-            <MenuItem value=''>Select Type</MenuItem>
-          </TextField>
         </div>
       </DialogContent>
       <DialogActions>
@@ -141,7 +125,6 @@ function ProfileDialog(props) {
 }
 
 const mapStateToProps = ({ accountReducer, auth }) => {
-  console.log(accountReducer, "accountReducer profile dialog");
   return {
     dialog: accountReducer.account.profileDialog,
     user: auth.user.data,

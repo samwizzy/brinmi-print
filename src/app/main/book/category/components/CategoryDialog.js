@@ -1,24 +1,24 @@
-import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import * as Actions from "./../../../../store/actions";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import * as Actions from './../../../../store/actions';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Dialog,
   DialogTitle,
   DialogActions,
   DialogContent,
   TextField,
-} from "@material-ui/core";
-import { Button } from "@brinmi";
+} from '@material-ui/core';
+import { Button } from '@brinmi';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    borderRadius: theme.shape.borderRadius * 5,
+    borderRadius: theme.shape.borderRadius * 4,
   },
   dialog: {
-    "& .MuiDialogActions-root": {
-      margin: theme.spacing(2),
+    '& .MuiDialogActions-root': {
+      margin: theme.spacing(0, 2, 0, 2),
     },
   },
 }));
@@ -26,10 +26,10 @@ const useStyles = makeStyles((theme) => ({
 function CategoryDialog(props) {
   const classes = useStyles(props);
   const dispatch = useDispatch();
-  const dialog = useSelector(({ books }) => books.category.categoryDialog);
+  const dialog = useSelector(({ library }) => library.category.categoryDialog);
   const [form, setForm] = useState({
-    description: "",
-    title: "",
+    description: '',
+    title: '',
   });
 
   const handleChange = (event) => {
@@ -45,32 +45,32 @@ function CategoryDialog(props) {
   return (
     <Dialog
       onClose={() => dispatch(Actions.closeCategoryDialog())}
-      aria-labelledby="subscribe-dialog"
+      aria-labelledby='subscribe-dialog'
       open={dialog.open}
       className={classes.dialog}
       classes={{ paper: classes.paper }}
     >
       <DialogTitle>New Category</DialogTitle>
-      <DialogContent>
-        <div className="text-center flex flex-col space-y-6">
+      <DialogContent dividers>
+        <div className='text-center flex flex-col space-y-6'>
           <TextField
-            label="Category Name"
-            name="title"
-            variant="outlined"
+            label='Category Name'
+            name='title'
+            variant='outlined'
             value={form.title}
             onChange={handleChange}
-            margin="dense"
+            margin='dense'
             fullWidth
           />
 
           <TextField
-            label="Category Description"
-            name="description"
-            variant="outlined"
+            label='Category Description'
+            name='description'
+            variant='outlined'
             value={form.description}
             onChange={handleChange}
             fullWidth
-            margin="dense"
+            margin='dense'
             multiline
             rows={3}
             rowsMax={4}
@@ -79,9 +79,9 @@ function CategoryDialog(props) {
       </DialogContent>
       <DialogActions>
         <Button
-          color="secondary"
-          variant="contained"
-          size="large"
+          color='secondary'
+          variant='contained'
+          size='large'
           rounded
           onClick={handleSubmit}
         >

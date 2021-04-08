@@ -1,4 +1,4 @@
-import * as Actions from "./../actions/books.actions";
+import * as Actions from './../actions/books.actions';
 
 const initialState = {
   books: [],
@@ -13,6 +13,12 @@ const bookReducer = (state = initialState, action) => {
       return {
         ...state,
         books: action.payload,
+      };
+    }
+    case Actions.UPLOAD_BOOK_PROGRESS: {
+      return {
+        ...state,
+        loading: true,
       };
     }
     case Actions.UPLOAD_BOOK: {
