@@ -49,7 +49,7 @@ function ChapterUploadDialog({ dialog, book, history }, props) {
         let doc = {
           title: file.name.split('.')[0],
           file: data,
-          fileExtension: file.type.split('/')[1],
+          fileExtension: `.${file.type.split('/')[1]}`,
         };
         const { chapter } = form;
         chapter[i] = { ...chapter[i], ...doc };

@@ -1,0 +1,1 @@
+GET http://134.209.64.28:8082/book-categories HTTP/1.1

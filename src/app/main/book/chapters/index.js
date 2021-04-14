@@ -129,7 +129,6 @@ export function BookChapter(props) {
 }
 
 const mapStateToProps = ({ chapterApp }) => {
-  console.log(chapterApp, "chapterApp");
   return {};
 };
 
